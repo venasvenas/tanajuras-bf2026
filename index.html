@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista VIP Black Friday — Tanajuras</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #CBE415;
+      --black: #080808;
+      --surface-0: #0d0d0d;
+      --surface-1: #141414;
+      --surface-2: #1a1a1a;
+      --surface-3: #222222;
+      --surface-4: #2a2a2a;
+      --text-primary: #f0f0f0;
+      --text-secondary: #aaaaaa;
+      --text-muted: #666666;
+      --border: rgba(203, 228, 21, 0.2);
+      --green-hover: #d9f01a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--black);
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Announcement bar */
+    .announcement {
+      background-color: var(--green);
+      color: var(--black);
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    /* Header */
+    header {
+      background-color: var(--surface-0);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--green);
+      letter-spacing: 0.08em;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(180deg, var(--surface-0) 0%, var(--black) 100%);
+      padding: 48px 24px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(203, 228, 21, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .bf-badge {
+      display: inline-block;
+      background-color: rgba(203, 228, 21, 0.12);
+      border: 1px solid var(--border);
+      color: var(--green);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 8vw, 3.8rem);
+      line-height: 1.0;
+      letter-spacing: 0.03em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .hero-headline .highlight {
+      color: var(--green);
+    }
+
+    .hero-subheadline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      color: var(--text-secondary);
+      letter-spacing: 0.03em;
+      margin-bottom: 20px;
+    }
+
+    .hero-body {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 540px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-body strong {
+      color: var(--text-primary);
+    }
+
+    /* Isa photo placeholder */
+    .isa-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid var(--green);
+      margin: 0 auto 24px;
+      background: var(--surface-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      overflow: hidden;
+    }
+
+    .isa-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Countdown */
+    .countdown-section {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 0 auto 32px;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    .countdown-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .countdown-timer {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .countdown-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--green);
+      line-height: 1;
+      background: var(--surface-2);
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .countdown-unit span {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .countdown-colon {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--text-muted);
+      padding-bottom: 12px;
+    }
+
+    /* Benefits list */
+    .benefits {
+      max-width: 480px;
+      margin: 0 auto 32px;
+      text-align: left;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .benefit-item:last-child {
+      border-bottom: none;
+    }
+
+    .benefit-icon {
+      width: 20px;
+      height: 20px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .benefit-icon svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .benefit-text {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .benefit-text strong {
+      color: var(--text-primary);
+      display: block;
+    }
+
+    /* Form Section */
+    .form-section {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .form-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.03em;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .form-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-primary);
+      transition: border-color 0.2s ease;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(203, 228, 21, 0.1);
+    }
+
+    .form-input-icon {
+      position: relative;
+    }
+
+    .form-input-icon .icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .form-input-icon input {
+      padding-left: 42px;
+    }
+
+    .cta-button {
+      width: 100%;
+      background: var(--green);
+      color: var(--black);
+      border: none;
+      border-radius: 10px;
+      padding: 17px 24px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      margin-top: 8px;
+    }
+
+    .cta-button:hover {
+      background-color: var(--green-hover);
+    }
+
+    .cta-button:active {
+      transform: scale(0.99);
+    }
+
+    .form-privacy {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
+    .form-privacy a {
+      color: var(--text-secondary);
+      text-decoration: underline;
+    }
+
+    /* Spots counter */
+    .spots-counter {
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    .spots-bar-wrap {
+      background: var(--surface-3);
+      border-radius: 100px;
+      height: 6px;
+      overflow: hidden;
+      margin: 8px 0 6px;
+    }
+
+    .spots-bar {
+      background: var(--green);
+      height: 100%;
+      width: 72%;
+      border-radius: 100px;
+    }
+
+    .spots-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .spots-text strong {
+      color: var(--green);
+    }
+
+    /* Social proof */
+    .social-proof {
+      padding: 40px 24px;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .testimonials {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .testimonial-card {
+      background: var(--surface-1);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .testimonial-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--surface-3);
+      flex-shrink: 0;
+    }
+
+    .testimonial-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+
+    .testimonial-stars {
+      color: var(--green);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+    }
+
+    .testimonial-body {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-secondary);
+    }
+
+    /* Sticky CTA for mobile */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, var(--black) 60%, transparent);
+      padding: 16px 20px 24px;
+      display: none;
+      z-index: 100;
+    }
+
+    .sticky-cta a {
+      display: block;
+      background: var(--green);
+      color: var(--black);
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      text-align: center;
+      padding: 15px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 36px 20px 28px;
+      }
+      .form-section {
+        margin: 0 4px;
+        border-radius: 12px;
+      }
+      .sticky-cta {
+        display: block;
+      }
+      body {
+        padding-bottom: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement">
+    ⚡ Lista VIP exclusiva — acesso antecipado + maior desconto do ano
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">TANAJURAS</div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+
+    <!-- Isa's photo -->
+    <div class="isa-photo">
+      <!-- Substituir por: <img src="[URL_FOTO_ISA]" alt="Isa Abrahão"> -->
+      <span>Foto Isa</span>
+    </div>
+
+    <div class="bf-badge">🖤 Black Friday 2026</div>
+
+    <h1 class="hero-headline">
+      Seja a <span class="highlight">primeira</span> a<br>
+      saber do Black Friday<br>
+      Tanajuras
+    </h1>
+
+    <p class="hero-body">
+      Entre na lista VIP e garanta <strong>acesso antecipado</strong> e o <strong>maior desconto exclusivo do ano</strong> — antes de todo mundo.
+    </p>
+
+    <!-- Countdown -->
+    <div class="countdown-section">
+      <div class="countdown-label">Oferta BF abre em</div>
+      <div class="countdown-timer">
+        <div class="countdown-unit">
+          <div class="countdown-number" id="days">74</div>
+          <span>dias</span>
+        </div>
+        <div class="countdown-colon">:</div>
+        <div class="countdown-unit">
+          <div class="countdown-number" id="hours">18</div>
+          <span>horas</span>
+        </div>
+        <div class="countdown-colon">:</div>
+        <div class="countdown-unit">
+          <div class="countdown-number" id="mins">43</div>
+          <span>min</span>
+        </div>
+        <div class="countdown-colon">:</div>
+        <div class="countdown-unit">
+          <div class="countdown-number" id="secs">12</div>
+          <span>seg</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Benefits -->
+    <div class="benefits">
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6L5 9L10 3" stroke="#080808" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="benefit-text">
+          <strong>Acesso 24h antes</strong>
+          Você compra antes de todo mundo abrir o link
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6L5 9L10 3" stroke="#080808" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="benefit-text">
+          <strong>Maior desconto do ano</strong>
+          Exclusivo para quem está na lista VIP — não anunciamos nas redes
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6L5 9L10 3" stroke="#080808" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="benefit-text">
+          <strong>Vagas limitadas</strong>
+          Oferta fecha quando esgotar — sem prazo estendido
+        </div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="form-section">
+      <div class="form-title">Quero entrar na lista VIP</div>
+      <div class="form-subtitle">Preencha abaixo para garantir seu lugar</div>
+
+      <form id="capture-form">
+        <div class="form-group">
+          <label class="form-label" for="nome">Seu nome</label>
+          <div class="form-input-icon">
+            <span class="icon">👤</span>
+            <input
+              class="form-input"
+              type="text"
+              id="nome"
+              name="nome"
+              placeholder="Como você se chama?"
+              required
+              autocomplete="given-name"
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="whatsapp">WhatsApp (com DDD)</label>
+          <div class="form-input-icon">
+            <span class="icon">📱</span>
+            <input
+              class="form-input"
+              type="tel"
+              id="whatsapp"
+              name="whatsapp"
+              placeholder="(11) 99999-9999"
+              required
+              autocomplete="tel"
+              inputmode="numeric"
+            >
+          </div>
+        </div>
+
+        <button type="submit" class="cta-button">
+          Quero ser avisada primeiro sobre o Black Friday 🖤
+        </button>
+      </form>
+
+      <!-- Spots counter -->
+      <div class="spots-counter">
+        <div class="spots-bar-wrap">
+          <div class="spots-bar"></div>
+        </div>
+        <div class="spots-text"><strong>423 pessoas</strong> já estão na lista VIP</div>
+      </div>
+
+      <p class="form-privacy">
+        🔒 Seus dados são 100% seguros. Sem spam, prometemos.<br>
+        Ao se cadastrar, você concorda com nossa <a href="#">Política de Privacidade</a>.
+      </p>
+    </div>
+
+  </section>
+
+  <!-- Social Proof -->
+  <section class="social-proof">
+    <div class="section-label">O que dizem quem já participou</div>
+    <div class="testimonials">
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar"></div>
+          <div>
+            <div class="testimonial-name">Ana C.</div>
+            <div class="testimonial-stars">★★★★★</div>
+          </div>
+        </div>
+        <div class="testimonial-body">
+          "Fui da lista VIP e consegui comprar na primeira hora. Valeu cada segundo de espera — o desconto foi incrível e não teria conseguido se não estivesse na lista."
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar"></div>
+          <div>
+            <div class="testimonial-name">Mariana S.</div>
+            <div class="testimonial-stars">★★★★★</div>
+          </div>
+        </div>
+        <div class="testimonial-body">
+          "Entrei na lista sem muito esperança e a Isa me surpreendeu. Acesso antecipado, desconto que não vi em nenhum outro lugar. Indico para todas as amigas!"
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">TANAJURAS</div>
+    <div class="footer-links">
+      <a href="#">Política de Privacidade</a>
+      <a href="#">Termos de Uso</a>
+      <a href="#">Contato</a>
+    </div>
+  </footer>
+
+  <!-- Sticky CTA (mobile only) -->
+  <div class="sticky-cta" id="sticky-cta">
+    <a href="#email">Quero entrar na lista VIP 🖤</a>
+  </div>
+
+  <script>
+    // Countdown timer — target: Black Friday 2026 = November 27, 2026 00:00:00 BRT
+    const target = new Date('2026-11-27T00:00:00-03:00');
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = target - now;
+      if (diff <= 0) {
+        document.getElementById('days').textContent = '00';
+        document.getElementById('hours').textContent = '00';
+        document.getElementById('mins').textContent = '00';
+        document.getElementById('secs').textContent = '00';
+        return;
+      }
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+      document.getElementById('days').textContent = String(d).padStart(2, '0');
+      document.getElementById('hours').textContent = String(h).padStart(2, '0');
+      document.getElementById('mins').textContent = String(m).padStart(2, '0');
+      document.getElementById('secs').textContent = String(s).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // WhatsApp Business number — replace with real Tanajuras number when available
+    const WA_BUSINESS_NUMBER = window.WA_BUSINESS_NUMBER || 'PLACEHOLDER';
+
+    // Google Sheets CRM webhook — set after deploying Apps Script from:
+    // https://docs.google.com/spreadsheets/d/1Smc3WXigS2sWIQFZbEdfmTEjOSfo7zfiW4Dt4La5BEI/edit
+    const SHEETS_WEBHOOK_URL = window.SHEETS_WEBHOOK_URL || 'https://advancement-discounted-phil-alliance.trycloudflare.com/webhook';
+
+    // WhatsApp field mask
+    const waInput = document.getElementById('whatsapp');
+    waInput.addEventListener('input', function() {
+      let v = this.value.replace(/\D/g, '');
+      if (v.length <= 10) {
+        v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+      } else {
+        v = v.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+      }
+      this.value = v;
+    });
+
+    // Form submission — Google Sheets CRM + WhatsApp redirect
+    document.getElementById('capture-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('.cta-button');
+      const nome = document.getElementById('nome').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.replace(/\D/g, '');
+
+      btn.textContent = '⏳ Salvando...';
+      btn.disabled = true;
+
+      // Save lead to Google Sheets CRM (primary backend)
+      if (SHEETS_WEBHOOK_URL) {
+        try {
+          await fetch(SHEETS_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nome, whatsapp,
+              fonte: 'lp-bf-2026',
+              utm_campaign: 'bf2026-vip',
+              ts: new Date().toISOString()
+            })
+          });
+        } catch(err) {
+          console.error('CRM webhook error:', err);
+        }
+      }
+
+      // Store lead locally as fallback
+      try {
+        const leads = JSON.parse(localStorage.getItem('vip_leads') || '[]');
+        leads.push({ nome, whatsapp, ts: new Date().toISOString() });
+        localStorage.setItem('vip_leads', JSON.stringify(leads));
+      } catch(err) {}
+
+      btn.textContent = '✓ Você está na lista VIP! Redirecionando...';
+      btn.style.backgroundColor = '#4ade80';
+
+      // Redirect to WhatsApp Business with pre-filled message
+      if (WA_BUSINESS_NUMBER !== 'PLACEHOLDER') {
+        const msg = encodeURIComponent(
+          `Olá Isa! Quero entrar na lista VIP da Tanajuras para o Black Friday 🖤\n\nNome: ${nome}\nWhatsApp: ${whatsapp}`
+        );
+        setTimeout(() => {
+          window.open(`https://wa.me/${WA_BUSINESS_NUMBER}?text=${msg}`, '_blank');
+        }, 800);
+      } else {
+        btn.textContent = '✓ Cadastro recebido! Entraremos em contato em breve.';
+      }
+    });
+
+    // Sticky CTA scroll behavior
+    const formSection = document.querySelector('.form-section');
+    const stickyCta = document.getElementById('sticky-cta');
+    if (stickyCta && formSection) {
+      const observer = new IntersectionObserver(([e]) => {
+        stickyCta.style.display = e.isIntersecting ? 'none' : 'block';
+      }, { threshold: 0.1 });
+      observer.observe(formSection);
+    }
+  </script>
+
+</body>
+</html>
