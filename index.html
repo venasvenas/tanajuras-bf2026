@@ -416,33 +416,6 @@
       margin: 0 auto;
     }
 
-    .social-proof-stat {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: rgba(203, 228, 21, 0.08);
-      border: 1px solid rgba(203, 228, 21, 0.2);
-      border-radius: 10px;
-      padding: 14px 20px;
-      margin-bottom: 24px;
-      text-align: center;
-    }
-
-    .social-proof-stat-number {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem;
-      color: var(--green);
-      letter-spacing: 0.04em;
-      line-height: 1;
-    }
-
-    .social-proof-stat-label {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
-
     .section-label {
       font-size: 0.72rem;
       letter-spacing: 0.14em;
@@ -730,10 +703,6 @@
 
   <!-- Social Proof -->
   <section class="social-proof">
-    <div class="social-proof-stat">
-      <div class="social-proof-stat-number">+30.000</div>
-      <div class="social-proof-stat-label">alunas já transformaram<br>sua saúde com Tanajuras</div>
-    </div>
     <div class="section-label">O que dizem quem já participou</div>
     <div class="testimonials">
       <div class="testimonial-card">
@@ -758,18 +727,6 @@
         </div>
         <div class="testimonial-body">
           "Entrei na lista sem muito esperança e a Isa me surpreendeu. Acesso antecipado, desconto que não vi em nenhum outro lugar. Indico para todas as amigas!"
-        </div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar"></div>
-          <div>
-            <div class="testimonial-name">Aline · Ribeirão Preto, SP</div>
-            <div class="testimonial-stars">★★★★★</div>
-          </div>
-        </div>
-        <div class="testimonial-body">
-          "O programa mudou minha relação com a alimentação de um jeito que eu não esperava. Emagreci, mas mais do que isso, aprendi a cuidar de mim de verdade. Vale muito cada centavo — ainda mais no Black Friday!"
         </div>
       </div>
     </div>
@@ -820,9 +777,12 @@
     // WhatsApp Business number — replace with real Tanajuras number when available
     const WA_BUSINESS_NUMBER = window.WA_BUSINESS_NUMBER || 'PLACEHOLDER';
 
-    // Google Sheets CRM webhook — set after deploying Apps Script from:
-    // https://docs.google.com/spreadsheets/d/1Smc3WXigS2sWIQFZbEdfmTEjOSfo7zfiW4Dt4La5BEI/edit
-    const SHEETS_WEBHOOK_URL = window.SHEETS_WEBHOOK_URL || 'https://advancement-discounted-phil-alliance.trycloudflare.com/webhook';
+    // Formspree CRM endpoint — create account at https://formspree.io/register
+    // Copy your 8-char form ID from the Formspree dashboard and set it here or via window.FORMSPREE_FORM_ID
+    const FORMSPREE_FORM_ID = window.FORMSPREE_FORM_ID || 'REPLACE_WITH_FORM_ID';
+    // Temporary fallback: webhook.site captures (CORS enabled, expires 2026-09-16 — replace with Formspree asap)
+    const TEMP_WEBHOOK_URL = 'https://webhook.site/675e2d10-ca1d-4c06-9f34-54abdad43bc9';
+    const SHEETS_WEBHOOK_URL = window.SHEETS_WEBHOOK_URL || (FORMSPREE_FORM_ID !== 'REPLACE_WITH_FORM_ID' ? `https://formspree.io/f/${FORMSPREE_FORM_ID}` : TEMP_WEBHOOK_URL);
 
     // WhatsApp field mask
     const waInput = document.getElementById('whatsapp');
