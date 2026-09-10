@@ -865,12 +865,14 @@ src="https://www.facebook.com/tr?id=PIXEL_ID_AQUI&ev=PageView&noscript=1"
       btn.textContent = '⏳ Salvando...';
       btn.disabled = true;
 
-      // Save lead: dual-write to webhook.site (immediate) + formsubmit.co (permanent, activates after board confirms email)
-      const leadData = JSON.stringify({ nome, whatsapp, fonte: 'lp-bf-2026', utm_campaign: 'bf2026-vip', ts: new Date().toISOString() });
-      const postOpts = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: leadData };
+      // Save lead: dual-write to webhook.site (expires 2026-09-16) + formsubmit.co (permanent, needs 1-click email activation)
+      const leadPayload = { nome, whatsapp, fonte: 'lp-bf-2026', utm_campaign: 'bf2026-vip', ts: new Date().toISOString() };
+      const webhookOpts = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(leadPayload) };
+      const fsPayload = Object.assign({}, leadPayload, { _subject: 'Novo Lead VIP BF2026 - Tanajuras', _captcha: 'false' });
+      const fsOpts = { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(fsPayload) };
       await Promise.all([
-        fetch(WEBHOOK_SITE_URL, postOpts).catch(err => console.error('webhook.site error:', err)),
-        fetch(FORMSUBMIT_URL, postOpts).catch(() => {})
+        fetch(WEBHOOK_SITE_URL, webhookOpts).catch(err => console.error('webhook.site error:', err)),
+        fetch(FORMSUBMIT_URL, fsOpts).catch(() => {})
       ]);
 
       // Store lead locally as fallback
