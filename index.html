@@ -911,6 +911,16 @@ src="https://www.facebook.com/tr?id=PIXEL_ID_AQUI&ev=PageView&noscript=1"
       }, { threshold: 0.1 });
       observer.observe(formSection);
     }
+
+    // Admin: ?leads=export — exports localStorage leads as CSV (fallback recovery)
+    if (new URLSearchParams(window.location.search).get('leads') === 'export') {
+      const stored = JSON.parse(localStorage.getItem('vip_leads') || '[]');
+      const csv = ['ts,nome,whatsapp'].concat(stored.map(r => `${r.ts},${r.nome},${r.whatsapp}`)).join('\n');
+      const a = document.createElement('a');
+      a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      a.download = 'leads-vip-bf2026.csv';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
   </script>
 
 </body>
