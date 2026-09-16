@@ -1,0 +1,8 @@
+name = "bf2026-crm"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bf2026-leads"
+database_id = "c2e31fc0-39fd-4ff0-b7ae-3533f0e20d95"

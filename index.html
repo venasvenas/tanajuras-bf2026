@@ -838,11 +838,12 @@ src="https://www.facebook.com/tr?id=PIXEL_ID_AQUI&ev=PageView&noscript=1"
     // WhatsApp Business number — replace with real Tanajuras number when available
     const WA_BUSINESS_NUMBER = window.WA_BUSINESS_NUMBER || 'PLACEHOLDER';
 
-    // CRM: webhook.site bridge (expires 2026-09-23) + formsubmit.co (activates after email click)
-    // Apps Script permanent URL (window.SHEETS_WEBHOOK_URL) will replace bridge once VIS-1879 OAuth completes
+    // CRM endpoints — priority: Cloudflare Worker (permanent) > webhook.site bridge (expires 2026-09-23)
+    // bf2026-crm Worker deployed via VIS-3452; update CLOUDFLARE_WORKER_URL once subdomain is known
     const FORMSUBMIT_URL = 'https://formsubmit.co/ajax/claude@tanajuras.com.br';
     const WEBHOOK_BRIDGE_URL = 'https://webhook.site/0b8aa0c4-b28d-4d90-a04f-17bfa473d750';
     const SHEETS_WEBHOOK_URL = window.SHEETS_WEBHOOK_URL || null;
+    const CLOUDFLARE_WORKER_URL = window.CLOUDFLARE_WORKER_URL || null;
 
     // WhatsApp field mask
     const waInput = document.getElementById('whatsapp');
@@ -875,6 +876,9 @@ src="https://www.facebook.com/tr?id=PIXEL_ID_AQUI&ev=PageView&noscript=1"
         fetch(WEBHOOK_BRIDGE_URL, jsonOpts).catch(() => {}),
         fetch(FORMSUBMIT_URL, fsOpts).catch(() => {})
       ];
+      if (CLOUDFLARE_WORKER_URL) {
+        crmRequests.unshift(fetch(CLOUDFLARE_WORKER_URL, jsonOpts).catch(err => console.error('CF worker error:', err)));
+      }
       if (SHEETS_WEBHOOK_URL) {
         crmRequests.push(fetch(SHEETS_WEBHOOK_URL, jsonOpts).catch(err => console.error('sheets webhook error:', err)));
       }
