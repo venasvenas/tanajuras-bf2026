@@ -838,9 +838,10 @@ src="https://www.facebook.com/tr?id=PIXEL_ID_AQUI&ev=PageView&noscript=1"
     // WhatsApp Business number — replace with real Tanajuras number when available
     const WA_BUSINESS_NUMBER = window.WA_BUSINESS_NUMBER || 'PLACEHOLDER';
 
-    // CRM: formsubmit.co (primary after webhook.site expired 2026-09-16)
-    // Apps Script permanent URL (window.SHEETS_WEBHOOK_URL) will activate once VIS-1879 OAuth completes
+    // CRM: webhook.site bridge (expires 2026-09-23) + formsubmit.co (activates after email click)
+    // Apps Script permanent URL (window.SHEETS_WEBHOOK_URL) will replace bridge once VIS-1879 OAuth completes
     const FORMSUBMIT_URL = 'https://formsubmit.co/ajax/claude@tanajuras.com.br';
+    const WEBHOOK_BRIDGE_URL = 'https://webhook.site/0b8aa0c4-b28d-4d90-a04f-17bfa473d750';
     const SHEETS_WEBHOOK_URL = window.SHEETS_WEBHOOK_URL || null;
 
     // WhatsApp field mask
@@ -865,14 +866,17 @@ src="https://www.facebook.com/tr?id=PIXEL_ID_AQUI&ev=PageView&noscript=1"
       btn.textContent = '⏳ Salvando...';
       btn.disabled = true;
 
-      // Submit to formsubmit.co (primary CRM); if Apps Script URL is set, also post there
+      // Submit to all CRM endpoints: webhook bridge (active until 2026-09-23), formsubmit.co, and Apps Script if set
       const leadPayload = { nome, whatsapp, fonte: 'lp-bf-2026', utm_campaign: 'bf2026-vip', ts: new Date().toISOString() };
       const fsPayload = Object.assign({}, leadPayload, { _subject: 'Novo Lead VIP BF2026 - Tanajuras', _captcha: 'false' });
+      const jsonOpts = { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(leadPayload) };
       const fsOpts = { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(fsPayload) };
-      const crmRequests = [fetch(FORMSUBMIT_URL, fsOpts).catch(() => {})];
+      const crmRequests = [
+        fetch(WEBHOOK_BRIDGE_URL, jsonOpts).catch(() => {}),
+        fetch(FORMSUBMIT_URL, fsOpts).catch(() => {})
+      ];
       if (SHEETS_WEBHOOK_URL) {
-        const webhookOpts = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(leadPayload) };
-        crmRequests.push(fetch(SHEETS_WEBHOOK_URL, webhookOpts).catch(err => console.error('sheets webhook error:', err)));
+        crmRequests.push(fetch(SHEETS_WEBHOOK_URL, jsonOpts).catch(err => console.error('sheets webhook error:', err)));
       }
       await Promise.all(crmRequests);
 
