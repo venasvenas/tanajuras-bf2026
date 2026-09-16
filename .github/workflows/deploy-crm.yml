@@ -6,19 +6,63 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
       - name: Deploy Cloudflare Worker
         uses: cloudflare/wrangler-action@v3
+        id: deploy
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: worker
+          command: deploy --dry-run=false
 
-      - name: Show Worker URL
+      - name: Extract Worker URL and Update LP
         run: |
-          echo "Worker deployed as 'bf2026-crm'."
-          echo "URL: https://bf2026-crm.<workers-subdomain>.workers.dev"
-          echo "Check Cloudflare Dashboard > Workers > bf2026-crm to confirm the live URL."
-          echo "Then update index.html: set window.CLOUDFLARE_WORKER_URL = '<url>'"
+          # Get the workers.dev subdomain from wrangler (or derive from account info)
+          # Try to get URL from wrangler output (wrangler-action sets deployment-url output)
+          WORKER_URL="${{ steps.deploy.outputs.deployment-url }}"
+          if [ -z "$WORKER_URL" ]; then
+            # Fallback: construct from known pattern
+            WORKER_URL="https://bf2026-crm.${{ secrets.CLOUDFLARE_ACCOUNT_SUBDOMAIN }}.workers.dev"
+          fi
+          echo "Worker URL: $WORKER_URL"
+          echo "WORKER_URL=$WORKER_URL" >> $GITHUB_OUTPUT
+          
+          # Update LP to hardcode the worker URL (replace the null placeholder)
+          python3 - << PYEOF
+          import re
+          with open('index.html', 'r') as f:
+              content = f.read()
+          # Replace the placeholder with the real URL
+          old = "const CLOUDFLARE_WORKER_URL = window.CLOUDFLARE_WORKER_URL || null;"
+          new = f"const CLOUDFLARE_WORKER_URL = window.CLOUDFLARE_WORKER_URL || '$WORKER_URL';"
+          updated = content.replace(old, new, 1)
+          if updated == content:
+              print("WARNING: placeholder not found, LP not updated")
+          else:
+              with open('index.html', 'w') as f:
+                  f.write(updated)
+              print(f"LP updated with worker URL: $WORKER_URL")
+          PYEOF
+        id: update-lp
+
+      - name: Commit LP Update
+        run: |
+          git config user.email "paperclip-bot@tanajuras.com.br"
+          git config user.name "Paperclip CRM Bot"
+          git add index.html
+          if git diff --staged --quiet; then
+            echo "No LP changes to commit"
+          else
+            git commit -m "feat(crm): activate bf2026-crm worker in LP
+
+Automatically deployed and activated by GitHub Actions.
+
+Co-Authored-By: Paperclip <noreply@paperclip.ing>"
+            git push
+            echo "LP updated and pushed!"
+          fi
